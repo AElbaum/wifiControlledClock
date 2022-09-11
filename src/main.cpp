@@ -1,225 +1,178 @@
-// /*
-//   * Simple ESP32 Web Server
-//   *  The ESP32 Wifi is configured as Access Point.
-//   *
-//   */
 #include <WiFi.h>
+#include <Servo.h>
 
-#define BLUE_LED 25
-#define GREEN_LED 26
-#define RED_LED 27
+Servo myservo; // create servo object to control a servo
+// twelve servo objects can be created on most boards
 
-// Create the objects for server and client
+// GPIO the servo is attached to
+static const int servoPin = 15;
+
+// Replace with your network credentials
+const char *ssid = "Maverick";
+const char *password = "unarmthawys3Jcq";
+
+String currentScene = "0";
+
+// Set web server port number to 80
 WiFiServer server(80);
-WiFiClient client;
 
-const char *ssid = "ESP32-AP-WebServer"; // This is the SSID that ESP32 will broadcast
-const char *password = "12345678";       // password should be atleast 8 characters to make it work
+// Variable to store the HTTP request
+String header;
 
-// Create the global variable
-String http;
-String bluLedState = "off";
-String grnLedState = "off";
-String redLedState = "off";
+// Decode HTTP GET value
+String valueString = String(5);
+int pos1 = 0;
+int pos2 = 0;
 
-void sendResponse()
+// Current time
+unsigned long currentTime = millis();
+// Previous time
+unsigned long previousTime = 0;
+// Define timeout time in milliseconds (example: 2000ms = 2s)
+const long timeoutTime = 2000;
+
+void C1()
 {
-  // Send the HTTP response headers
-  client.println("HTTP/1.1 200 OK");
-  client.println("Content-type:text/html");
-  client.println("Connection: close");
-  client.println();
+  myservo.write(0);  // CW down shaft
+  delay(1000);       // delay 1 second
+  myservo.write(90); // stop
 }
 
-void updateWebpage()
+void C2()
 {
-  // In here we will display / update the webpage by sending the HTML
-  //  to the connected client
-  // In order for us to use the HTTP GET functionality,
-  //  the HTML hyperlinks or href is use in the buttons.
-  //  So that, when you press the buttons, it will send a request to the
-  //  web server with the href links by which our ESP32 web server will
-  //  be check using HTTP GET and execute the equivalent action
-
-  // Send the whole HTML
-  client.println("<!DOCTYPE html><html>");
-  client.println("<head>");
-  client.println("<title>ESP32 WiFi Station</title>");
-  client.println("</head>");
-
-  // Web Page Heading
-  client.println("<body><h1>Simple ESP32 Web Server</h1>");
-
-  // Display buttons for Blue LED
-  client.println("<p>1. Blue LED is " + bluLedState + "</p>");
-  if (bluLedState == "off")
-  {
-    client.println("<p><a href=\"/BLUE_LED/on\"><button>Turn ON</button></a></p>");
-  }
-  else
-  {
-    client.println("<p><a href=\"/BLUE_LED/off\"><button>Turn OFF</button></a></p>");
-  }
-
-  client.print("<hr>");
-
-  // Display buttons for Green LED
-  client.println("<p>2. Green LED is " + grnLedState + "</p>");
-  if (grnLedState == "off")
-  {
-    client.println("<p><a href=\"/GREEN_LED/on\"><button>Turn ON</button></a></p>");
-  }
-  else
-  {
-    client.println("<p><a href=\"/GREEN_LED/off\"><button>Turn OFF</button></a></p>");
-  }
-
-  client.print("<hr>");
-
-  // Display buttons for Red LED
-  client.println("<p>3. Red LED is " + redLedState + "</p>");
-  if (redLedState == "off")
-  {
-    client.println("<p><a href=\"/RED_LED/on\"><button>Turn ON</button></a></p>");
-  }
-  else
-  {
-    client.println("<p><a href=\"/RED_LED/off\"><button>Turn OFF</button></a></p>");
-  }
-
-  client.println("</body></html>");
-  client.println();
+  myservo.write(180); // CCW down shaft
+  delay(1000);        // delay 1 second
+  myservo.write(90);  // stop
 }
 
-void updateLED()
+void C3()
 {
-  // In here we will check the HTTP request of the connected client
-  //  using the HTTP GET function,
-  //  Then turns the LED on / off according to the HTTP request
-  if (http.indexOf("GET /BLUE_LED/on") >= 0)
-  {
-    Serial.println("Blue LED on");
-    bluLedState = "on";
-    digitalWrite(BLUE_LED, HIGH);
-  }
-  else if (http.indexOf("GET /BLUE_LED/off") >= 0)
-  {
-    Serial.println("Blue LED off");
-    bluLedState = "off";
-    digitalWrite(BLUE_LED, LOW);
-  }
-  else if (http.indexOf("GET /GREEN_LED/on") >= 0)
-  {
-    Serial.println("Green LED on");
-    grnLedState = "on";
-    digitalWrite(GREEN_LED, HIGH);
-  }
-  else if (http.indexOf("GET /GREEN_LED/off") >= 0)
-  {
-    Serial.println("Green LED off");
-    grnLedState = "off";
-    digitalWrite(GREEN_LED, LOW);
-  }
-  else if (http.indexOf("GET /RED_LED/on") >= 0)
-  {
-    Serial.println("Red LED on");
-    redLedState = "on";
-    digitalWrite(RED_LED, HIGH);
-  }
-  else if (http.indexOf("GET /RED_LED/off") >= 0)
-  {
-    Serial.println("Red LED off");
-    redLedState = "off";
-    digitalWrite(RED_LED, LOW);
-  }
+  myservo.write(0);  // CW down shaft
+  delay(1000);       // delay 1 second
+  myservo.write(90); // stop
+  delay(1000);
+  myservo.write(180); // CCW down shaft
+  delay(1000);        // delay 1 second
+  myservo.write(90);  // stop
 }
 
 void setup()
 {
   Serial.begin(9600);
-  pinMode(BLUE_LED, OUTPUT);
-  pinMode(GREEN_LED, OUTPUT);
-  pinMode(RED_LED, OUTPUT);
-  digitalWrite(BLUE_LED, LOW);
-  digitalWrite(GREEN_LED, LOW);
-  digitalWrite(RED_LED, LOW);
+
+  myservo.attach(servoPin); // attaches the servo on the servoPin to the servo object
+
+  // Connect to Wi-Fi network with SSID and password
   Serial.print("Connecting to ");
   Serial.println(ssid);
-
-  // Create the ESP32 access point
-  /*
-   * Alternative:
-   * softAP(const char* ssid,
-   *     const char* password,
-   *     int channel,
-   *     int ssid_hidden,
-   *     int max_connection
-   *
-   *     where:
-   *      ssid - this is the SSID that will be broadcast by ESP32
-   *          maximum of 63 characters
-   *      password - this is the password to connect to ESP32
-   *          minimum of 8 characters to function
-   *          Put NULL to make it open to public
-   *      channel - wifi channels (ranging from 1 to 13)
-   *      ssid_hidden - sets the SSID as broadcast or hidden
-   *          0: broadcast SSID
-   *          1: hidden SSID,
-   *           you need to type the exact SSID name in order to connect
-   *      max_connection - maximum number of connected clients
-   *          accepts 1 to 4 only
-   *
-   */
-  WiFi.softAP(ssid, password);
-
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    Serial.print(".");
+  }
+  // Print local IP address and start web server
   Serial.println("");
-  Serial.println("WiFi AP is now running");
+  Serial.println("WiFi connected.");
   Serial.println("IP address: ");
-  Serial.println(WiFi.softAPIP());
-
-  // Start our ESP32 server
+  Serial.println(WiFi.localIP());
   server.begin();
 }
 
 void loop()
 {
+  WiFiClient client = server.available(); // Listen for incoming clients
 
-  if (client = server.available())
-  { // Checks if a new client tries to connect to our server
-    Serial.println("New Client.");
-    String clientData = "";
-    while (client.connected())
-    { // Wait until the client finish sending HTTP request
+  if (client)
+  { // If a new client connects,
+    currentTime = millis();
+    previousTime = currentTime;
+    Serial.println("New Client."); // print a message out in the serial port
+    String currentLine = "";       // make a String to hold incoming data from the client
+    while (client.connected() && currentTime - previousTime <= timeoutTime)
+    { // loop while the client's connected
+      currentTime = millis();
       if (client.available())
-      {                         // If there is a data,
-        char c = client.read(); //  read one character
-        http += c;              //  then parse it
-        Serial.write(c);
+      {                         // if there's bytes to read from the client,
+        char c = client.read(); // read a byte, then
+        Serial.write(c);        // print it out the serial monitor
+        header += c;
         if (c == '\n')
-        { // If the character is carriage return,
-          //  it means end of http request from client
-          if (clientData.length() == 0)
-          {                 //  Now that the clientData is cleared,
-            sendResponse(); //    perform the necessary action
-            updateLED();
-            updateWebpage();
+        { // if the byte is a newline character
+          // if the current line is blank, you got two newline characters in a row.
+          // that's the end of the client HTTP request, so send a response:
+          if (currentLine.length() == 0)
+          {
+            // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+            // and a content-type so the client knows what's coming, then a blank line:
+            client.println("HTTP/1.1 200 OK");
+            client.println("Content-type:text/html");
+            client.println("Connection: close");
+            client.println();
+
+            // Sends command to spin servo
+            if (header.indexOf("GET /C1/go") >= 0)
+            {
+              Serial.println("C1 Go");
+              C1();
+            }
+            if (header.indexOf("GET /C2/go") >= 0)
+            {
+              Serial.println("C2 Go");
+              C2();
+            }
+            if (header.indexOf("GET /C3/go") >= 0)
+            {
+              Serial.println("C3 Go");
+              C3();
+            }
+
+            // Display the HTML web page
+            client.println("<!DOCTYPE html><html>");
+            client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+            client.println("<link rel=\"icon\" href=\"data:,\">");
+            // CSS to style the on/off buttons
+            // Feel free to change the background-color and font-size attributes to fit your preferences
+            client.println("<style>body { text-align: center; font-family: \"Trebuchet MS\", Arial; margin-left:auto; margin-right:auto;}");
+            client.println(".slider { width: 300px; }</style>");
+            client.println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>");
+
+            // Web Page
+            client.println("</head><body><h1>Clock</h1>");
+            client.println("<p>Current Scene " + currentScene + "</p>");
+            // If the output26State is off, it displays the ON button
+            client.println("<p><a href=\"/C1/go\"><button class=\"button\">C1</button></a></p>");
+            client.println("<p><a href=\"/C2/go\"><button class=\"button\">C2</button></a></p>");
+            client.println("<p><a href=\"/C3/go\"><button class=\"button\">C3</button></a></p>");
+            // if (currentScene=="0") {
+
+            // } else {
+            //   //client.println("<p><a href=\"/26/off\"><button class=\"button button2\">OFF</button></a></p>");
+            // }
+
+            client.println("</body></html>");
+
+            // The HTTP response ends with another blank line
+            client.println();
+            // Break out of the while loop
             break;
           }
           else
-          {
-            clientData = ""; //  First, clear the clientData
+          { // if you got a newline, then clear currentLine
+            currentLine = "";
           }
         }
         else if (c != '\r')
-        {                  // Or if the character is NOT new line
-          clientData += c; //  store the character to the clientData variable
+        {                   // if you got anything else but a carriage return character,
+          currentLine += c; // add it to the end of the currentLine
         }
       }
     }
-    http = "";
-    client.stop(); // Disconnect the client.
+    // Clear the header variable
+    header = "";
+    // Close the connection
+    client.stop();
     Serial.println("Client disconnected.");
     Serial.println("");
   }
 }
-
