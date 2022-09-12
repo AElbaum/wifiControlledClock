@@ -8,8 +8,8 @@ Servo myservo; // create servo object to control a servo
 static const int servoPin = 15;
 
 // Replace with your network credentials
-const char *ssid = "Maverick";
-const char *password = "unarmthawys3Jcq";
+const char *ssid = "Clock";
+const char *password = "12345678";
 
 String currentScene = "0";
 
@@ -33,7 +33,7 @@ const long timeoutTime = 2000;
 // Speed can be 0-90, closer to zero the faster
 
 int threemin = 110;
-int onemin = 110/3l;
+int onemin = 70;
 
 void tick(int time, int speed)
 {
@@ -64,17 +64,21 @@ void C2()
 
 void C3()
 {
-  //Deleted
+  myservo.writeMicroseconds(1400); 
 }
 
 void C4()
 {
-  tick(900000,80);
+  for (int i = 0; i < 15; i++)
+  {
+    tick(50,0);
+    delay(60000);
+  }
 }
 
 void C5()
 {
-  //Deleted
+  myservo.writeMicroseconds(1000); 
 }
 
 void C6()
@@ -84,7 +88,7 @@ void C6()
   tick(threemin,20); // tick quickly into 1326
   delay(1100); // wait 1.1 second
   tick(threemin,20); // tick quickly into 1329
-  tick(7*60000,80);
+  tick(7*60000,78);
 }
 
 void C7()
@@ -101,17 +105,17 @@ void C8()
   tick(threemin,20); // tick quickly into 1646
   delay(1100); // wait 1.1 second
   tick(threemin,20); // tick quickly into 1649
-  tick(7*60000,80);
+  tick(7*60000,78);
 }
 
 void C85()
 {
-  tick(15000,30);
+  tick(3000,70);
 }
 
 void C9()
 {
-  tick(30000,0);
+  tick(30000,70);
 }
 
 void C10()
@@ -169,7 +173,7 @@ void C18()
 
 void C19()
 {
-  tick(5000,80);
+  tick(1000,75);
 }
 
 void C20()
@@ -179,12 +183,12 @@ void C20()
 
 void forward()
 {
-  tick(50,30);
+  myservo.writeMicroseconds(1100); 
 }
 
 void backward()
 {
-  tick(50,180);
+  myservo.writeMicroseconds(1600); 
 }
 
 void stop()
@@ -201,12 +205,13 @@ void setup()
   // Connect to Wi-Fi network with SSID and password
   Serial.print("Connecting to ");
   Serial.println(ssid);
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(500);
-    Serial.print(".");
-  }
+  //WiFi.begin(ssid, password);
+  WiFi.softAP(ssid, password);
+  // while (WiFi.status() != WL_CONNECTED)
+  // {
+  //   delay(500);
+  //   Serial.print(".");
+  // }
   // Print local IP address and start web server
   Serial.println("");
   Serial.println("WiFi connected.");
@@ -415,9 +420,9 @@ void loop()
             // If the output26State is off, it displays the ON button
             client.println("<p><a href=\"/C1/go\"><button class=\"button\">C1</button></a></p>");
             client.println("<p><a href=\"/C2/go\"><button class=\"button\">C2</button></a></p>");
-            //client.println("<p><a href=\"/C3/go\"><button class=\"button\">C3</button></a></p>");
+            client.println("<p><a href=\"/C3/go\"><button class=\"button\">C3</button></a></p>");
             client.println("<p><a href=\"/C4/go\"><button class=\"button\">C4</button></a></p>");
-            //client.println("<p><a href=\"/C5/go\"><button class=\"button\">C5</button></a></p>");
+            client.println("<p><a href=\"/C5/go\"><button class=\"button\">C5</button></a></p>");
             client.println("<p><a href=\"/C6/go\"><button class=\"button\">C6</button></a></p>");
             client.println("<p><a href=\"/C7/go\"><button class=\"button\">C7</button></a></p>");
             client.println("<p><a href=\"/C8/go\"><button class=\"button\">C8</button></a></p>");
@@ -435,8 +440,8 @@ void loop()
             client.println("<p><a href=\"/C19/go\"><button class=\"button\">C19</button></a></p>");
             client.println("<p><a href=\"/C20/go\"><button class=\"button\">C20</button></a></p>");
 
-            client.println("<p><a href=\"/forward\"><button class=\"button\">Forward 50</button></a></p>");
-            client.println("<p><a href=\"/backward\"><button class=\"button\">Backward 50</button></a></p>");
+            client.println("<p><a href=\"/forward\"><button class=\"button\">Forward</button></a></p>");
+            client.println("<p><a href=\"/backward\"><button class=\"button\">Backward</button></a></p>");
             client.println("<p><a href=\"/stop\"><button class=\"button\">Stop</button></a></p>");
 
             client.println("</body></html>");
