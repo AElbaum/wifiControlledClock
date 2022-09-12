@@ -64,7 +64,7 @@ void C2()
 
 void C3()
 {
-  
+  //Deleted
 }
 
 void C4()
@@ -74,47 +74,63 @@ void C4()
 
 void C5()
 {
-  
+  //Deleted
 }
 
 void C6()
 {
-  
+  tick(threemin,20); // tick quickly into 1323
+  delay(1100); // wait 1.1 second
+  tick(threemin,20); // tick quickly into 1326
+  delay(1100); // wait 1.1 second
+  tick(threemin,20); // tick quickly into 1329
+  tick(7*60000,80);
 }
 
 void C7()
 {
-  
+  tick(4*60000,80);
 }
 
 void C8()
 {
-  
+  tick(threemin,20); // tick quickly into 1640
+  delay(1100); // wait 1.1 second
+  tick(threemin,20); // tick quickly into 1643
+  delay(1100); // wait 1.1 second
+  tick(threemin,20); // tick quickly into 1646
+  delay(1100); // wait 1.1 second
+  tick(threemin,20); // tick quickly into 1649
+  tick(7*60000,80);
 }
 
 void C85()
 {
-  
+  tick(15000,30);
 }
 
 void C9()
 {
-  
+  tick(30000,0);
 }
 
 void C10()
 {
-  
+  for (int i = 0; i < 60; i++)
+  {
+    tick(threemin,0);
+    delay(1150);
+  }
 }
 
 void C11()
 {
-  
+  //Deleted
 }
 
 void C12()
 {
-  
+  //Deleted
 }
 
 void C13()
@@ -399,17 +415,17 @@ void loop()
             // If the output26State is off, it displays the ON button
             client.println("<p><a href=\"/C1/go\"><button class=\"button\">C1</button></a></p>");
             client.println("<p><a href=\"/C2/go\"><button class=\"button\">C2</button></a></p>");
-            client.println("<p><a href=\"/C3/go\"><button class=\"button\">C3</button></a></p>");
+            //client.println("<p><a href=\"/C3/go\"><button class=\"button\">C3</button></a></p>");
             client.println("<p><a href=\"/C4/go\"><button class=\"button\">C4</button></a></p>");
-            client.println("<p><a href=\"/C5/go\"><button class=\"button\">C5</button></a></p>");
+            //client.println("<p><a href=\"/C5/go\"><button class=\"button\">C5</button></a></p>");
             client.println("<p><a href=\"/C6/go\"><button class=\"button\">C6</button></a></p>");
             client.println("<p><a href=\"/C7/go\"><button class=\"button\">C7</button></a></p>");
             client.println("<p><a href=\"/C8/go\"><button class=\"button\">C8</button></a></p>");
             client.println("<p><a href=\"/C85/go\"><button class=\"button\">C85</button></a></p>");
             client.println("<p><a href=\"/C9/go\"><button class=\"button\">C9</button></a></p>");
             client.println("<p><a href=\"/C10/go\"><button class=\"button\">C10</button></a></p>");
-            client.println("<p><a href=\"/C11/go\"><button class=\"button\">C11</button></a></p>");
-            client.println("<p><a href=\"/C12/go\"><button class=\"button\">C12</button></a></p>");
+            //client.println("<p><a href=\"/C11/go\"><button class=\"button\">C11</button></a></p>");
+            //client.println("<p><a href=\"/C12/go\"><button class=\"button\">C12</button></a></p>");
             client.println("<p><a href=\"/C13/go\"><button class=\"button\">C13</button></a></p>");
             client.println("<p><a href=\"/C14/go\"><button class=\"button\">C14</button></a></p>");
             client.println("<p><a href=\"/C15/go\"><button class=\"button\">C15</button></a></p>");
