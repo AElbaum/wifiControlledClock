@@ -44,27 +44,21 @@ void tick(int time, int speed)
 
 void C1()
 {
-  tick(threemin,20); // tick quickly into 9:30
-  delay(1100); // wait 1.1 second
-  tick(threemin,20); // tick quickly into 9:30
-  delay(1100); // wait 1.1 second
-  tick(threemin,20); // tick quickly into 9:33
-  delay(1100); // wait 1.1 second
-  tick(threemin,20); // tick quickly into 9:36
+  for (int i = 0; i < 30; i++)
+  {
+    tick(threemin,20); // tick quickly into 9:30
+    delay(1100); // wait 1.1 second
+  }
 }
 
 void C2()
 {
-  tick(threemin,20); // tick quickly into 9:39
-  delay(1100); // wait 1.1 second
-  tick(threemin,20); // tick quickly into 9:42
-  delay(1100); // wait 1.1 second
-  tick(threemin,20); // tick quickly into 9:45
+  tick(10000,70);
 }
 
 void C3()
 {
-  myservo.writeMicroseconds(1400); 
+  tick(onemin,20);
 }
 
 void C4()
@@ -421,28 +415,28 @@ void loop()
             client.println("<p><a href=\"/C1/go\"><button class=\"button\">C1</button></a></p>");
             client.println("<p><a href=\"/C2/go\"><button class=\"button\">C2</button></a></p>");
             client.println("<p><a href=\"/C3/go\"><button class=\"button\">C3</button></a></p>");
-            client.println("<p><a href=\"/C4/go\"><button class=\"button\">C4</button></a></p>");
-            client.println("<p><a href=\"/C5/go\"><button class=\"button\">C5</button></a></p>");
-            client.println("<p><a href=\"/C6/go\"><button class=\"button\">C6</button></a></p>");
-            client.println("<p><a href=\"/C7/go\"><button class=\"button\">C7</button></a></p>");
-            client.println("<p><a href=\"/C8/go\"><button class=\"button\">C8</button></a></p>");
-            client.println("<p><a href=\"/C85/go\"><button class=\"button\">C85</button></a></p>");
-            client.println("<p><a href=\"/C9/go\"><button class=\"button\">C9</button></a></p>");
-            client.println("<p><a href=\"/C10/go\"><button class=\"button\">C10</button></a></p>");
-            //client.println("<p><a href=\"/C11/go\"><button class=\"button\">C11</button></a></p>");
-            //client.println("<p><a href=\"/C12/go\"><button class=\"button\">C12</button></a></p>");
-            client.println("<p><a href=\"/C13/go\"><button class=\"button\">C13</button></a></p>");
-            client.println("<p><a href=\"/C14/go\"><button class=\"button\">C14</button></a></p>");
-            client.println("<p><a href=\"/C15/go\"><button class=\"button\">C15</button></a></p>");
-            client.println("<p><a href=\"/C16/go\"><button class=\"button\">C16</button></a></p>");
-            client.println("<p><a href=\"/C17/go\"><button class=\"button\">C17</button></a></p>");
-            client.println("<p><a href=\"/C18/go\"><button class=\"button\">C18</button></a></p>");
-            client.println("<p><a href=\"/C19/go\"><button class=\"button\">C19</button></a></p>");
-            client.println("<p><a href=\"/C20/go\"><button class=\"button\">C20</button></a></p>");
+            //client.println("<p><a href=\"/C4/go\"><button class=\"button\">C4</button></a></p>");
+            //client.println("<p><a href=\"/C5/go\"><button class=\"button\">C5</button></a></p>");
+            //client.println("<p><a href=\"/C6/go\"><button class=\"button\">C6</button></a></p>");
+            // client.println("<p><a href=\"/C7/go\"><button class=\"button\">C7</button></a></p>");
+            // client.println("<p><a href=\"/C8/go\"><button class=\"button\">C8</button></a></p>");
+            // client.println("<p><a href=\"/C85/go\"><button class=\"button\">C85</button></a></p>");
+            // client.println("<p><a href=\"/C9/go\"><button class=\"button\">C9</button></a></p>");
+            // client.println("<p><a href=\"/C10/go\"><button class=\"button\">C10</button></a></p>");
+            // //client.println("<p><a href=\"/C11/go\"><button class=\"button\">C11</button></a></p>");
+            // //client.println("<p><a href=\"/C12/go\"><button class=\"button\">C12</button></a></p>");
+            // client.println("<p><a href=\"/C13/go\"><button class=\"button\">C13</button></a></p>");
+            // client.println("<p><a href=\"/C14/go\"><button class=\"button\">C14</button></a></p>");
+            // client.println("<p><a href=\"/C15/go\"><button class=\"button\">C15</button></a></p>");
+            // client.println("<p><a href=\"/C16/go\"><button class=\"button\">C16</button></a></p>");
+            // client.println("<p><a href=\"/C17/go\"><button class=\"button\">C17</button></a></p>");
+            // client.println("<p><a href=\"/C18/go\"><button class=\"button\">C18</button></a></p>");
+            // client.println("<p><a href=\"/C19/go\"><button class=\"button\">C19</button></a></p>");
+            // client.println("<p><a href=\"/C20/go\"><button class=\"button\">C20</button></a></p>");
 
-            client.println("<p><a href=\"/forward\"><button class=\"button\">Forward</button></a></p>");
-            client.println("<p><a href=\"/backward\"><button class=\"button\">Backward</button></a></p>");
-            client.println("<p><a href=\"/stop\"><button class=\"button\">Stop</button></a></p>");
+            // client.println("<p><a href=\"/forward\"><button class=\"button\">Forward</button></a></p>");
+            // client.println("<p><a href=\"/backward\"><button class=\"button\">Backward</button></a></p>");
+            // client.println("<p><a href=\"/stop\"><button class=\"button\">Stop</button></a></p>");
 
             client.println("</body></html>");
 
